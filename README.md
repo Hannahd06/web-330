@@ -1,2 +1,5 @@
-# web-330
-Repository to contain assignments for web-330 Enterprise JavaScript II
+# WEB 330 Enterprise JavaScript II
+Assignments files created for web-330 Enterprise JavaScript II
+## Contributors
+* Professor Peter Itskovich
+* Hannah Del Real
