@@ -1,0 +1,98 @@
+<!--
+    Title: delreal-palindrome.html
+    Author: Hannah Del Real
+    Date: 3/20/2023
+    Description: Palindrome app for week-2 assignment.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WEB 330 – Enterprise JavaScript II</title>
+     <link href="https://hannahd06.github.io/web-330/theme.css" type="text/css" rel="stylesheet">
+     <link href="https://hannahd06.github.io/web-330/site.css" type="text/css" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+     <script src="https://hannahd06.github.io/web-330/theme.js"></script>
+</head>
+<body class="light-theme">
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to the Palindrome App!</h1>
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Palindrome Checker</div>
+                <div class="card-content">
+                    <div class="form">
+                        <div class="form-field">
+                            <label for="txtPhrase">Phrase value:</label>
+                            <input type="text" class="input" id="txtPhrase" />
+                        </div>
+
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnCheckPhrase">Check Phrase</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                <a href="https://hannahd06.github.io/web-330/index.html">Return</a> 
+    
+        </div>
+    </div>
+    
+    <div class="assign-container">
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Palindrome Results</div>
+                <div id="assign-results-header" class="card-content"></div>
+                <div class="card-content assign-results-text" id="assign-results">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        setSelectedTheme();
+
+        function getTodaysDate() {
+            return new Date ().toLocaleDateString('en-US');
+        }
+
+        function getLength(str) {
+            return str.length;
+        }
+
+        function reverse(str) {
+            let str1 = str.split("");
+            str1.reverse();
+            return str1.join("");
+        }
+
+        function isPalindrome(str) {
+            if (str === reverse(str)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        document.getElementById("btnCheckPhrase").onclick = function () {
+            let txtPhrase = document.getElementById("txtPhrase").value;
+            let assignResults = document.getElementById("assign-results"); 
+            let assignResultsHeader = document.getElementById("assign-results-header")
+            //function variables
+            let today = getTodaysDate();
+            let len = getLength(txtPhrase);
+            let reversedPhrase = reverse(txtPhrase);
+            let header = `Date: ${today} <br> Original Phrase: ${txtPhrase} <br> Reversed Phrase: ${reversedPhrase} <br> Phrase length: ${len}`
+
+        assignResultsHeader.innerHTML = header;
+
+        if (isPalindrome(txtPhrase.toLowerCase())) {
+            assignResults.innerHTML = `${txtPhrase} <b><u>is</u></b> a palindrome!`;
+        } else {
+            assignResults.innerHTML = `${txtPhrase} <b><u>is not</u></b> a palindrome!`;
+        }
+        }
+    </script>
+</body>
+</html>
