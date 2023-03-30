@@ -1,0 +1,177 @@
+<!--
+    Title: delreal-restaurant.html
+    Author: Hannah Del Real
+    Date: 3/28/2023
+    Description: Restaurant app for week-3 assignment.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <title>WEB 330 – Enterprise JavaScript II</title>
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/theme.css">
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/site.css">
+    <link rel="stylesheet" type="text/css" href="./restaurant.css">
+     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+     <script src="https://hannahd06.github.io/web-330/theme.js"></script>
+     <script type="module" src="./product.js"></script>
+</head>
+<body class="light-theme">
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to the Restaurant App!</h1>
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Restaurant Menu</div>
+                <div class="card-content" id="grid-box">
+                    
+                    <!--Card for beverage selections and prices.-->
+                    <div class="card">
+                        <div class="card-title">Beverages</div>
+                        <div class="card-content">
+                            <div id="beverages">
+                                <input type="checkbox" id="soda" name="soda" value="3.30">
+                                <label for="soda">Soda ($3.30)</label><br />
+                                
+                                <input type="checkbox" id="sweetTea" name="sweetTea" value="3.30">
+                                <label for="soda">Sweet Tea ($3.30)</label><br />
+
+                                <input type="checkbox" id="icedCoffee" name="icedCoffee" value="2.49">
+                                <label for="soda">Iced Coffee ($2.49)</label><br />
+
+                                <input type="checkbox" id="bottledWater" name="bottledWater" value="2.15">
+                                <label for="soda">Bottled Water ($2.15)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                   <!--Card for appetizer selections and prices.-->
+                    <div class="card">
+                        <div class="card-title">Appetizers</div> 
+                        <div id="appetizers" class="card-content">
+                                <input type="checkbox" id="nachos" name="nachos" value="6.60">
+                                <label for="nachos">Nachos ($6.60)</label><br />
+                                
+                                <input type="checkbox" id="chipsSalsa" name="chipsSalsa" value="5.50">
+                                <label for="chipsSalsa">Chips and Salsa ($5.50)</label><br />
+
+                                <input type="checkbox" id="pretzelCheese" name="pretzelCheese" value="8.80">
+                                <label for="pretzelCheese">Pretzel and Cheese ($8.80)</label><br />
+
+                                <input type="checkbox" id="friedPickles" name="friedPickles" value="8.25">
+                                <label for="friedPickles">Fried Pickles ($8.25)</label>
+                        </div>
+                    </div>
+
+                    <!--Card for main course selections and prices.-->
+                    <div class="card">
+                        <div class="card-title">Main Courses</div> 
+                        <div class="card-content">
+                            <div id="main-courses">
+                                <input type="checkbox" id="streetTacos" name="streetTacos" value="9.70">
+                                <label for="streetTacos">Street Tacos ($9.70)</label><br />
+                                
+                                <input type="checkbox" id="bonelessWings" name="bonelessWings" value="12.80">
+                                <label for="bonelessWings">Boneless Wings ($12.80)</label><br />
+
+                                <input type="checkbox" id="cheeseBurgerFries" name="cheeseBurgerFries" value="12.65">
+                                <label for="cheeseBurgerFries">Cheese Burger with Fries ($12.65)</label><br />
+
+                                <input type="checkbox" id="chickenWrapSalad" name="chickenWrapSalad" value="9.65">
+                                <label for="chickenWrapSalad">Chicken Wrap with Salad  ($9.65)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Card for desert selections and prices and submit button to request order total.-->
+                    <div class="card">
+                        <div class="card-title">Desserts</div> 
+                        <div class="card-content">
+                            <div id="deserts">
+                                <input type="checkbox" id="iceCream" name="iceCream" value="4.30">
+                                <label for="iceCream">Ice Cream ($4.30)</label><br />
+                                
+                                <input type="checkbox" id="chocolateCake" name="chocolateCake" value="5.40">
+                                <label for="chocolateCake">Chocolate Cake ($5.40)</label><br />
+
+                                <input type="checkbox" id="applePie" name="applePie" value="3.80">
+                                <label for="applePie">Apple Pie ($3.80)</label>
+                            </div>
+                            <button class="btn btn-primary full-width" id="btnOrder">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--This is the link to return to Web-330 repository landing page-->
+            <a href="https://hannahd06.github.io/web-330/index.html">Return</a> 
+        </div>
+    </div>
+<!--Container holding results card.-->
+    <div class="assign-container">
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Order Summary</div>
+                <div class="card-content assign-results-text" id="order-total"></div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        setSelectedTheme ();
+
+        import {Bill, Beverage, Appetizer, MainCourse, Dessert} from "./index.js"
+
+        document.getElementById("btnOrder").onclick = function () {
+            //Created variables to hold the div containing beverage item checkboxes. 
+            const beveragesEl = document.getElementById("beverages");
+            const beverages = beveragesEl.getElementsByTagName("input");
+
+            //Created variables to hold the div containing appetizer item checkboxes. 
+            const appetizersEl = document.getElementById("appetizers");
+            const appetizers = appetizersEl.getElementsByTagName("input");
+
+            //Created variables to hold the div containing main course item checkboxes. 
+            const mainCoursesEl = document.getElementById("main-courses");
+            const mainCourses = mainCoursesEl.getElementsByTagName("input");
+
+            //Created variables to hold the div containing dessert item checkboxes. 
+            const dessertsEl = document.getElementById("deserts");
+            const desserts = dessertsEl.getElementsByTagName("input");
+
+            let bill = new Bill ();
+            //Created loops to check for selected items that will be used to calculate total.
+            for (let bvrg of beverages) {
+                if (bvrg.checked)
+                {
+                    bill.addBeverage(new Beverage(bvrg.name, bvrg.value));
+                }
+            }
+
+            for (let apptzr of appetizers) {
+                if (apptzr.checked)
+                {
+                    bill.addAppetizer(new Appetizer(apptzr.name, apptzr.value));
+                }
+            }
+
+            for (let mainCourse of mainCourses) {
+                if (mainCourse.checked)
+                {
+                    bill.addMainCourse(new MainCourse(mainCourse.name, mainCourse.value));
+                }
+            }
+
+            for (let dssrt of desserts) {
+                if (dssrt.checked)
+                {
+                    bill.addDessert(new Dessert(dssrt.name, dssrt.value));
+                }
+            }
+
+        // Display calculated total in the results card.
+        document.getElementById("order-total").innerHTML = `Your order total is $${bill.getTotal()}`;
+
+        }
+    </script>
+</body>
+</html>
