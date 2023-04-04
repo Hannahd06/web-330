@@ -155,13 +155,12 @@ h2, h3, h4 {
     box-sizing: border-box;
 }
 
-table {
+.table {
     border-collapse: collapse;
-    width: 100%;
     margin-bottom: 30px;
 }
 
-table th {
+.table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
@@ -169,7 +168,7 @@ table th {
     color: var(--table-header-color);
 }
 
-table td, table th {
+.table td, th {
     border: 1px solid var(--table-border-color);
     padding: 8px;
     text-align: left;
