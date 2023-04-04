@@ -175,7 +175,7 @@ table td, table th {
     text-align: left;
 }
 
-.table-hover, tr:hover {
+.table-hover:hover {
     background-color: var(--table-hover-background-color);
     color: var(--table-hover-color);
     cursor: pointer;
