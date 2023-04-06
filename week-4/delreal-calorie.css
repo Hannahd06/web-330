@@ -1,0 +1,13 @@
+/**
+    Title: delreal-calorie.css
+    Author: Hannah Del Real
+    Date: 4/3/2023
+    Description: CSS styling for delreal-calorie.html.
+*/
+
+#foodList {
+    float: left;
+    color: #df546a;
+    font-size: 12px;
+    letter-spacing: 2px;
+}

@@ -1,0 +1,98 @@
+<!--
+    Title: delreal-calorie.html
+    Author: Hannah Del Real
+    Date: 4/3/2023
+    Description: Calorie app for week-4 assignment.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WEB 330 – Enterprise JavaScript II</title>
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/theme.css">
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/site.css">
+    <link rel="stylesheet" type="text/css" href="./delreal-calorie.css">
+     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+     <script src="https://hannahd06.github.io/web-330/theme.js"></script>
+     <script type="module" src="./food-model.js"></script>
+</head>
+<body class="light-theme">
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to the Calorie App!</h1>
+
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Calorie Search Form</div>
+                <div class="card-content">
+                    <div class="form">
+                        <!--Input Field for user to the food item.-->
+                        <div class="form-field">
+                            <label for="txtFoodItem">Enter a food item: </label>
+                            <input type="text" class="txtFoodItem" id="txtFoodItem" >
+                            <div><span id="foodList"></span></div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnSearch">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--This is the link to return to Web-330 repository landing page-->
+            <a href="https://hannahd06.github.io/web-330/index.html">Return</a> 
+        
+
+        </div>
+    </div>
+
+    <div class="assign-container">
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Search Results</div>
+                <div class="card-content assign-results-text" id="searchResults">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+       // Import the class CalorieConverter from calorie-converter.js.
+       import { CalorieConverter } from './calorie-converter.js';
+
+        let txtFoodItemE1 = document.getElementById("txtFoodItem");
+
+        document.getElementById("btnSearch").onclick = function() {
+            //Get the inputted food item and store in lower case.
+            let txtFoodItem = txtFoodItemE1.value.toLowerCase();
+            let foods = CalorieConverter.find(txtFoodItem);
+            //Create an HTML table to display the food item name and calories.
+            let tableData = `<table class="table"><tr><th>Name</th><th>Calories</th></tr>`;
+                for (let food of foods) {
+                    tableData += `<tr class="table-hover"><td>${food.name}</td><td>${food.calories}</td></tr>`;
+                } 
+            tableData += `</table>`;
+            // Link data table to be displayed in the results cards. 
+            document.getElementById("searchResults").innerHTML = tableData;  
+        }
+        // Create a click event when the user presses the enter key.
+        txtFoodItemE1.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("btnSearch").click();
+            }    
+        });
+        // Display the food items that the user should type in the input field. 
+        let foodList = CalorieConverter.data;
+        let foodListData = `<i>(Ex: `;
+            for (let food of foodList) {
+                foodListData += `${food.name}, `;
+            }
+        //Remove the trailing comma.
+        foodListData = foodListData.slice(0, -2);
+        foodListData += `)</i>`;
+        document.getElementById("foodList").innerHTML = foodListData;
+
+    </script>
+</body>
+</html>
