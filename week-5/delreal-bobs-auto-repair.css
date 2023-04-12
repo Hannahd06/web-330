@@ -1,0 +1,30 @@
+/**
+    Title: delreal-bobs-auto-repair.css
+    Author: Hannah Del Real
+    Date: 4/11/2023
+    Description: CSS styling for delreal-bobs-auto-repair.html.
+*/
+
+#cart-message {
+    float: right;
+    color: #df546a;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-top: -35px;
+}
+
+i:hover {
+    cursor: pointer;
+}
+
+#cartIcon {
+    padding-left: 270px;
+    font-size: 2em;
+    color: var(--card-title-color);
+}
+
+#cart-count {
+    font-size: 2em;
+    color: var(--card-title-color);
+
+}

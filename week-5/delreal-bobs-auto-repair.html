@@ -1,0 +1,116 @@
+<!--
+    Title: delreal-bobs-auto-repair.html
+    Author: Hannah Del Real
+    Date: 4/11/2023
+    Description: Bob's auto repair product listing and cart for week-4 assignment.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WEB 330 – Enterprise JavaScript II</title>
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/theme.css">
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/site.css">
+    <link rel="stylesheet" type="text/css" href="./delreal-bobs-auto-repair.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://hannahd06.github.io/web-330/theme.js"></script>
+    <script type="module" src="./cart-component.js"></script>
+</head>
+<body class="light-theme">
+    <div class="assign-container">
+        <h1 class="app-header">Welcome to Bob's Automotive Repair Shop!</h1>
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Product Listing</div>
+                <cart-component></cart-component>
+
+                <div class="card-content">
+                    <div class="form">
+                        <div class="form-field">
+                            Choose a product:
+                            <select id="productList" name="productList" class="drop-down-menu">
+                                <option value="select">--Select--</option>
+                                <option value="19.99">Oil Change</option>
+                                <option value="18.44">Filter Replacement</option>
+                                <option value="9.99">Wiper Fluid Refill</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <i id="cart-message">To view your shopping cart click on the cart icon</i>
+                        </div>
+                        
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnAddProduct">Add To Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--This is the link to return to Web-330 repository landing page-->
+            <a href="https://hannahd06.github.io/web-330/index.html">Return</a> 
+        </div>
+    </div>
+    <div class="assign-container">
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Shopping Cart</div>
+                <div id="shoppingCart" class="card-content"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script> 
+        setSelectedTheme();
+    </script>
+    <script type="module">
+        import { Product } from './product.js';
+        import { ShoppingCart } from './shopping-cart.js';
+        // Start a new shopping cart.
+        let shoppingCart = new ShoppingCart();
+
+        // Indicate the number of items currently in the shopping cart.
+        function setCartCount() {
+            document.getElementById("cart-count").innerHTML = shoppingCart.count();
+        }
+
+        setCartCount();
+
+        document.getElementById("btnAddProduct").onclick = function() {
+            let productList = document.getElementById("productList");
+            let product = productList.options[productList.selectedIndex].text;
+            let productValue = productList.options[productList.selectedIndex].value;
+
+            if (product !== "--Select--") {
+                shoppingCart.add(new Product(product, productValue));
+                setCartCount();
+                // Sends pop-up alert that selected item was added to cart. 
+                alert(`${product} was added to your shopping cart!`);
+                productList.value = "select";
+            }
+        }
+
+        document.getElementById("cartIcon").onclick = function() {
+            //Create table header to display in results card-content. 
+            let cartDisplayTable = `<table class="table">
+                                    <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    </tr>`;
+            
+            for (let item of shoppingCart) {
+                cartDisplayTable += `<tr class="table-hover">
+                                    <td>${item.id}</td>
+                                    <td>${item.name}</td>
+                                    <td>${item.price}</td>
+                                    </tr>`;
+            }
+            cartDisplayTable += `</table>`;
+            document.getElementById("shoppingCart").innerHTML = cartDisplayTable;
+        }
+
+    </script>
+</body>
+</html>
