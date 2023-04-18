@@ -1,0 +1,17 @@
+/**
+    Title: delreal-future-value.css
+    Author: Hannah Del Real
+    Date: 4/17/2023
+    Description: Styling for delreal-future-value.html
+ */
+.danger {
+    float: right;
+    color: #df546a;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.form-label {
+    display: inline-block;
+    padding-top: 1rem;
+}

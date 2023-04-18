@@ -1,0 +1,154 @@
+<!--
+    Title: delreal-bobs-auto-repair.html
+    Author: Hannah Del Real
+    Date: 4/17/2023
+    Description: Future Value App for week-5 assignment.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WEB 330 – Enterprise JavaScript II</title>
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/theme.css">
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/site.css">
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/flex-layout.css">
+    <link rel="stylesheet" type="text/css" href="./delreal-future-value.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://hannahd06.github.io/web-330/theme.js"></script>
+</head>
+<body class="light-theme">
+    <div class="assign-container">
+        <div class="assign-content">
+            <h1 class="app-header">Welcome to the Future Value App!</h1>
+            <div class="card">
+                <div class="card-title">Future Value Calculator</div>
+                <div class="card-content">
+                    <div class="row">
+                        <div class="danger col-12" id="errorLog"></div>
+                    </div>
+                    <div class="form">
+                        <div class="form-field">
+                            <div class="row">
+                                <label for="txtMonthlyPayment" class="col-5 form-label">Monthly Payment:</label>
+                                <input type="text" id="txtMonthlyPayment" class="col-7">
+                            </div>
+                            <div class="row">
+                                <label for="txtYearlyRate" class="col-5 form-label">Interest Rate:</label>
+                                <input type="text" id="txtYearlyRate" class="col-7">
+                                    <div>
+                                        <i class="danger">Enter 11% as 11.1.</i>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                <label for="listNumOfYears" class="col-5 form-label">Number of Years:</label>
+                                <select name="listNumOfYears" id="listNumOfYears" class="drop-down-menu col-7">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <button class="btn btn-primary full-width" id="btnCalculate">Calculate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!--This is the link to return to Web-330 repository landing page-->
+            <a href="https://hannahd06.github.io/web-330/index.html">Return</a> 
+        </div>
+    </div>
+
+    <div class="assign-container">
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">
+                    Calculation as of <span id="today"></span>
+                </div>
+                <div class="card-content assign-results-text" id="futureValue">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script> 
+        setSelectedTheme();
+    </script>
+    <script type="module">
+        // Import classes.
+        import { FinanceCalculator } from './finance-calculator.js';
+        import { Validator } from "./validator.js";
+
+        // Get today's day and bind to results title.
+        document.getElementById("today").innerHTML = new Date().toLocaleDateString("en-US");
+
+        //Register on-click event.
+        document.getElementById("btnCalculate").onclick = function() {
+            // Assign monthly payment input to variable monthlyPayment.
+            let monthlyPayment = document.getElementById("txtMonthlyPayment").value;
+            // Assign variable rate to input for interest rate.
+            let rate = document.getElementById("txtYearlyRate").value;
+            // Assign variable years to drop down list selection.
+            let years = document.getElementById("listNumOfYears").value;
+            // Log errors.
+            let errorLogE1 = document.getElementById("errorLog");
+            // Create validator for monthly payment field
+            let monthlyPaymentValidator = new Validator("Monthly Payment", monthlyPayment);
+            // Create validation parameters for input field.
+            monthlyPaymentValidator.addRequiredField();
+            monthlyPaymentValidator.addRequiredFloatField();
+            monthlyPaymentValidator.addFloatMinField(100);
+
+            // Create validator for interest rate input.
+            let rateValidator = new Validator("Interest Rate", rate);
+
+            // Add validator parameters for input field.
+            rateValidator.addRequiredField();
+            rateValidator.addRequiredFloatField();
+            rateValidator.addFloatMaxField(100);
+
+            let errorLog = [];
+
+            // Call validate function of monthyPaymentValidator.
+            if (!monthlyPaymentValidator.validate()) {
+                // If false, push error message to errorLog.
+                for (let msg of monthlyPaymentValidator.messages)
+                {
+                    errorLog.push(msg);
+                }
+            }
+
+            if (!rateValidator.validate()) {
+                // If false, push error message to errorLog.
+                for (let msg of rateValidator.messages) {
+                    errorLog.push(msg);
+                }
+            }
+
+            if (monthlyPaymentValidator.validate() && rateValidator.validate()) {
+                // If true, clear errorLogE1, calculate future rate.
+                errorLogE1.innerHTML ="";
+                let futureValue = FinanceCalculator.calculateFutureValue(monthlyPayment, rate, years);
+                document.getElementById("futureValue").innerHTML = `The future value is $${futureValue}`;
+            } else {
+                // If false, clear errorLogE1, and add all error messages in an unordered list. 
+                errorLogE1.innerHTML = "";
+                let errorLogMessage = `<ul>`;
+                for  (let message of errorLog) {
+                    errorLogMessage += `<li>${message}</li>`;
+                } 
+                errorLogMessage += `</ul>`;
+             errorLogE1.innerHTML = errorLogMessage;
+            }
+        };
+    </script>
+</body>
+</html>
