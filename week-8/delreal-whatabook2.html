@@ -1,0 +1,155 @@
+<!--
+    Title: delreal-whatabook.html
+    Author: Hannah Del Real
+    Date: 4/24/2023
+    Description: Whatabook, Part 1 app for week-7 assignment.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WEB 330 – Enterprise JavaScript II</title>
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/theme.css">
+    <link rel="stylesheet" type="text/css" href="https://hannahd06.github.io/web-330/site.css">
+     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+     <script src="https://hannahd06.github.io/web-330/theme.js"></script>
+</head>
+<body class="light-theme">
+    <div class="assign-container">
+        <div class="assign-content">
+            <h1 class="app-header">Welcome to the WhatABook, Part 2 App!</h1>
+            <div class="card">
+                <div class="card-title">Book Listing</div>
+                <div class="card-content" id="bookList">
+                </div>
+            </div>
+        </div>
+                    <!--This is the link to return to Web-330 repository landing page-->
+                    <a href="https://hannahd06.github.io/web-330/index.html">Return</a> 
+    </div>
+    <div class="assign-container">
+        <div class="assign-content">
+            <div class="card">
+                <div class="card-title">Selected Book</div>
+                <div class="card-content" id="selectedBook">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        setSelectedTheme();
+    </script>
+    <script type="module">
+        // Import class named HttpClient from http-client.js.
+        import { HttpClient } from './http-client.js';
+
+        // Create a new object from the imported class. 
+        const http =  new HttpClient();
+        
+        // Create a variable named isbn to hold array of ISBN numbers.
+        const isbns = [
+            '0345339681',
+            '0261103571',
+            '9780593099322',
+            '9780261102361',
+            '9780261102378',
+            '9780590302715',
+            '9780316769532',
+            '9780743273565',
+            '9780590405959'
+        ];
+
+        // Create an object literal named params.
+        const params = {
+            "bibkeys": `ISBN:${isbns.join(",")}`,
+            "format": "json",
+            "jscmd": "details"
+        };
+        
+        // Pulls data from openlibrary.org and variable parms to display Book List information.
+        http.get("https://openlibrary.org/api/books", params).then(res => {
+            console.log(res);
+            document.getElementById("bookList").innerHTML = buildHTMLString(res, "table");
+            addIsbnClickEvents();
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+
+        // Create a function named getBook.
+        function getBook(e) {
+            e.preventDefault();
+            let self = this;
+            let isbn = self.innerText;
+
+            // Create a new params object literal.
+            const params = {
+            "bibkeys": `ISBN:${isbn}`,
+            "format": "json",
+            "jscmd": "details"
+            };
+
+            // Pulls data from openlibrary.org and variable parms to display selected book information.
+            http.get('https://openlibrary.org/api/books', params).then(res => {
+            console.log(res);
+            document.getElementById("selectedBook").innerHTML = buildHTMLString(res, "ul");
+             })
+            .catch((error) => {
+            console.log(error);
+            })
+        }
+
+        function buildHTMLString(res, format) {
+            //create variable tableString assigned to string for HTML table header.
+            let tableString = `<table class="table" id="bookTable">
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Pages</th>
+                    <th>Author</th>
+                    </tr>`;
+            let ulString = "";
+
+            for (let key in res) {
+                ulString += `<ul style="list-style-type: none;">`;
+                
+                if (res.hasOwnProperty(key)) {
+                    let authors = [];
+                    if (res[key].details.authors) {
+                        authors += res[key].details.authors.map(function(author) {
+                            return author.name;
+                        });
+                    }
+                    
+                    let book = {
+                        isbn: res[key].details.isbn_11 || res[key].details.isbn_13 || res[key].details.isbn_10,
+                        title: res[key].details.title,
+                        description: res[key].details.subtitle || res[key].details.subtitle || "N/A",
+                        pages: res[key].details.number_of_pages || res[key].details.number_of_pages || "N/A",
+                        authors: authors
+                    }
+                    ulString += `<li><b>ISBN:</b> ${book.isbn}</li><li><b>Title:</b> ${book.title}</li><li><b>Description:</b> ${book.description}</li><li><b>Pages:</b> ${book.pages}</li><li><b>Authors:</b> ${book.authors}</li></ul>`;
+                    
+                    tableString += `<tr class="table-hover"><td><a href="#" class="isbn-link" id="isbn-link">${book.isbn}</a></td><td>${book.title}</td><td>${book.description}</td><td>${book.pages}</td><td>${book.authors}</td></tr>`;
+                }         
+            }
+            tableString += `</table>`;
+            if (format === "table") {
+                return tableString;
+            } else {
+                return ulString;
+            }
+       
+        }
+
+        function addIsbnClickEvents() {
+                let viewButtons = document.querySelectorAll("#bookTable tbody .isbn-link");
+                for (let index = 0; index < viewButtons.length; index++) {
+                    viewButtons[index].addEventListener("click", getBook);
+                }
+        }
+    </script>
+</body>
+</html>
